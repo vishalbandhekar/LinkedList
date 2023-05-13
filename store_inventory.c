@@ -96,20 +96,23 @@ void insertNode(struct Node* head)
 void getStockByModelNumber(struct Node* head, char modelnumber[])
 {
 	struct Node* node = head;
+	int flag=0;
 	while(node->next!=NULL)
 	{
 		if(strcmp(node->modelnumber,modelnumber)==0)
 		{
+			flag=1;
 			printf("Stock Name: %s\n", node->stockname);
 			printf("Model Number: %s\n", node->modelnumber);
 			printf("Count: %d\n", node->count);
         		printf("Venodr: %s\n\n", node->vendor);
 		}
-		else
-		{
-			printf("Model not exists\n");
-		}
 	}
+
+if(flag==1)
+{
+	printf("Model doesn't exists");
+}
 }
 
 //function to fetch data from this stocks_available.txt file and store in single linked list structure. i.e Init function
