@@ -1,6 +1,3 @@
-#ifndef STORE_INVENTORY_H 
-#define STORE_INVENTORY_H  
-
 //structure of a Node
 struct Node {
     char stockname[20];
@@ -28,4 +25,7 @@ void getStockByModelNumber(struct Node* head, char modelnumber[]);
 //function to fetch data from this stocks_available.txt file and store in single linked list structure. i.e Init function
 struct Node* fetchData();
 
-#endif
+//print the data
+void printData(); 
+
+

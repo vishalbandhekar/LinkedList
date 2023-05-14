@@ -33,8 +33,8 @@ int main()
 
 	switch(option)
 	{
-		case 1:	if(head!=NULL)
-				printLinkedList(head);
+		case 1:	if(head)
+				 printData();
 			else
 				printf("List is empty");
 			break;

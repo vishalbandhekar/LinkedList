@@ -47,7 +47,7 @@ void addEntryToFile(const char* filename, struct Node* entry)
 		return;
 	}
 
-	fprintf(file,"\n%s,%s,%d,%s\n", entry->stockname, entry->modelnumber, entry->count, entry->vendor);
+	fprintf(file,"%s,%s,%d,%s\n", entry->stockname, entry->modelnumber, entry->count, entry->vendor);
 	fclose(file);
 }
 
@@ -57,7 +57,7 @@ void insertNode(struct Node* head)
 	char stockname[20],modelnumber[20],vendor[20];
 	int count;
 
-	printf("please enter the node value");
+	printf("please enter the node value\n");
 	printf("Stock Name:");
 	scanf("%s",stockname);
 
@@ -93,26 +93,24 @@ void insertNode(struct Node* head)
 }
 
 //function to search model number
-void getStockByModelNumber(struct Node* head, char modelnumber[])
-{
-	struct Node* node = head;
-	int flag=0;
-	while(node->next!=NULL)
-	{
-		if(strcmp(node->modelnumber,modelnumber)==0)
-		{
-			flag=1;
-			printf("Stock Name: %s\n", node->stockname);
-			printf("Model Number: %s\n", node->modelnumber);
-			printf("Count: %d\n", node->count);
-        		printf("Venodr: %s\n\n", node->vendor);
-		}
-	}
+void getStockByModelNumber(struct Node* head, char modelnumber[]) {
+    struct Node* node = head;
+    int found = 0;
 
-if(flag==1)
-{
-	printf("Model doesn't exists");
-}
+    while (node != NULL) {
+        if (strcmp(node->modelnumber, modelnumber) == 0) {
+            printf("Stock Name: %s\n", node->stockname);
+            printf("Model Number: %s\n", node->modelnumber);
+            printf("Count: %d\n", node->count);
+            printf("Vendor: %s\n\n", node->vendor);
+            found = 1;
+        }
+        node = node->next;
+    }
+
+    if (!found) {
+        printf("Model not found.\n");
+    }
 }
 
 //function to fetch data from this stocks_available.txt file and store in single linked list structure. i.e Init function
@@ -130,88 +128,206 @@ struct Node* fetchData()
 	struct Node* current = NULL;
 	char line[256];
 
-	while (fgets(line, sizeof(line), file)) 
+	while(fgets(line, sizeof(line), file)) 
 	{
-
 		// Remove the newline character from the line
 		line[strcspn(line, "\n")] = '\0';
 
-		// Tokenize the line
-		char* stockname = strtok(line, ",");
-		if (stockname == NULL) 
+        	// Tokenize the line
+        	char* stockname = strtok(line, ",");
+        	if(stockname == NULL) 
 		{
 			char value[10];
 			printf("Stock Name is empty please enter Stock Name:");
 			scanf("%s",value);
-			stockname = value;		
-		}
-
-		char* modelnumber = strtok(NULL, ",");
-        	if (modelnumber == NULL) 
-		{  
-	        	char value[10];
-			printf("Model Number is empty please enter Model Number:");
+			stockname = value;
+        	}
+        
+        	char* modelnumber = strtok(NULL, ",");
+        	if(modelnumber == NULL) 
+		{
+			char value[10];
+			printf("Stock Name is empty please enter Model Number:");
 			scanf("%s",value);
 			modelnumber = value;
-		}
+        	}
 
-		char* countStr = strtok(NULL, ",");
-		if (countStr == NULL) 
+        	char* countStr = strtok(NULL, ",");
+        	if(countStr == NULL) 
 		{
 			char value[10];
-			printf("Count is empty please enter count:");
+			printf("Stock Name is empty please enter Count:");
 			scanf("%s",value);
 			countStr = value;
-		}
+        	}
         	int count = atoi(countStr);
 
-		char* vendor = strtok(NULL, ",");
-		if (vendor == NULL) 
+        	char* vendor = strtok(NULL, ",");
+        	if(vendor == NULL) 
 		{
 			char value[10];
-			printf("Vendor is empty please enter Vendor:");
-			scanf("%s",value); 
-			vendor = value;		
-		}
+			printf("Stock Name is empty please enter Vendor:");
+			scanf("%s",value);
+			vendor = value;
 
-		// Create a new node
-		struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-		if (newNode == NULL) 
+			struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        		if(newNode == NULL) 
+			{
+            			printf("Failed to allocate memory for new node.\n");
+            			return 0;
+        		}
+
+        		// Copy the data fields into the new node
+        		strncpy(newNode->stockname, stockname, sizeof(newNode->stockname) - 1);
+        		strncpy(newNode->modelnumber, modelnumber, sizeof(newNode->modelnumber) - 1);
+        		newNode->count = count;
+        		strncpy(newNode->vendor, vendor, sizeof(newNode->vendor) - 1);
+
+        		newNode->next = NULL;
+			
+			// Check if the linked list is empty
+        		if(head == NULL) 
+			{
+				head = newNode;
+            			current = newNode;
+        		} 
+			else 
+			{
+            			current->next = newNode;
+            			current = current->next;
+        		}
+	
+            	}
+		
+
+
+        	// Create a new node
+        	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        	if(newNode == NULL) 
 		{
-			printf("Failed to allocate memory for new node.\n");
-			return 0;
-		}
+            		printf("Failed to allocate memory for new node.\n");
+            		return 0;
+        	}
 
-		// Copy the data fields into the new node
+        	// Copy the data fields into the new node
         	strncpy(newNode->stockname, stockname, sizeof(newNode->stockname) - 1);
         	strncpy(newNode->modelnumber, modelnumber, sizeof(newNode->modelnumber) - 1);
         	newNode->count = count;
         	strncpy(newNode->vendor, vendor, sizeof(newNode->vendor) - 1);
-		newNode->next = NULL;
+
+        	newNode->next = NULL;
 
         	// Check if the linked list is empty
-        	if (head == NULL) 
+        	if(head == NULL) 
 		{
 			head = newNode;
-			current = newNode;
-		} 
+            		current = newNode;
+        	} 
 		else 
 		{
-			current->next = newNode;
-			current = current->next;
+            		current->next = newNode;
+            		current = current->next;
         	}
-	}
+    	}
 	fclose(file);
 
-	// Free the memory allocated for the linked list
-	current = head;
-	while (current != NULL) 
+    	// Free the memory allocated for the linked list
+    	current = head;
+    	while(current != NULL) 
 	{
         	struct Node* temp = current;
         	current = current->next;
         	free(temp);
     	}
+	return head;
+}
 
-return head;
+void printData()
+{
+	FILE* file = fopen("stocks_available.txt", "r");
+	if(file == NULL) 
+	{
+		printf("Failed to open the file.\n");
+		return;
+	}
+
+	struct Node* head = NULL;
+	struct Node* current = NULL;
+	char line[256];
+
+	while(fgets(line, sizeof(line), file)) 
+	{
+		// Remove the newline character from the line
+		line[strcspn(line, "\n")] = '\0';
+
+        	// Tokenize the line
+        	char* stockname = strtok(line, ",");
+        	if(stockname == NULL) 
+		{
+			continue;
+        	}
+        
+        	char* modelnumber = strtok(NULL, ",");
+        	if(modelnumber == NULL) 
+		{
+			continue;	
+        	}
+
+        	char* countStr = strtok(NULL, ",");
+        	if(countStr == NULL) 
+		{
+			continue;
+        	}
+        	int count = atoi(countStr);
+
+        	char* vendor = strtok(NULL, ",");
+        	if(vendor == NULL) 
+		{
+			continue;
+            	}
+
+        	// Create a new node
+        	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        	if(newNode == NULL) 
+		{
+            		printf("Failed to allocate memory for new node.\n");
+            		return;
+        	}
+
+        	// Copy the data fields into the new node
+        	strncpy(newNode->stockname, stockname, sizeof(newNode->stockname) - 1);
+        	strncpy(newNode->modelnumber, modelnumber, sizeof(newNode->modelnumber) - 1);
+        	newNode->count = count;
+        	strncpy(newNode->vendor, vendor, sizeof(newNode->vendor) - 1);
+
+        	newNode->next = NULL;
+
+        	// Check if the linked list is empty
+        	if(head == NULL) 
+		{
+			head = newNode;
+            		current = newNode;
+        	} 
+		else 
+		{
+            		current->next = newNode;
+            		current = current->next;
+        	}
+    	}
+	fclose(file);
+
+    	// Print the linked list data
+    	printLinkedList(head);
+
+    	// Free the memory allocated for the linked list
+    	current = head;
+    	while(current != NULL) 
+	{
+        	struct Node* temp = current;
+        	current = current->next;
+        	free(temp);
+    	}
+	
+	
 }
 

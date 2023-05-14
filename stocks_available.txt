@@ -1,4 +1,5 @@
 cpu,BHJ3456,2,Intel
 chip,BCM7410,3,Broadcom
 mouse,GHU8798,10,Dell
-graphic card,DFH7863,AMD
+graphic card,DFH7863,0,AMD
+keyboard,FHG654TY,34,Zebrox
