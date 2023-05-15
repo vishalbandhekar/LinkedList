@@ -7,8 +7,9 @@
 
 //function to print the linked list
 void printLinkedList(struct Node* head) 
-{
+{	
 	struct Node* current = head;
+
 	while(current != NULL)
 	{
 		printf("Stock Name: %s\n", current->stockname);
