@@ -34,7 +34,7 @@ int main()
 	switch(option)
 	{
 		case 1:	if(head)
-				 printData();
+				 printLinkedList(head); 
 			else
 				printf("List is empty");
 			break;

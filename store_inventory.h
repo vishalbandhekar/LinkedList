@@ -25,7 +25,5 @@ void getStockByModelNumber(struct Node* head, char modelnumber[]);
 //function to fetch data from this stocks_available.txt file and store in single linked list structure. i.e Init function
 struct Node* fetchData();
 
-//print the data
-void printData(); 
 
 
